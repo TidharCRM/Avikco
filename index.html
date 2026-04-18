@@ -162,6 +162,44 @@ const ACCENTS = {
   saffron: { name: "זעפרן",  color: "oklch(0.78 0.14 80)", deep: "oklch(0.62 0.15 75)" },
 };
 
+const WHATSAPP_NUMBER = '972547432200';
+const PACKAGES = [
+  {
+    id:'experience', roman:'I', name:'חוויה קולינרית', price:230,
+    tagline:'הקלאסיקה.',
+    blurb:'ארוחה מלאה מלאה בתפריט שלנו — פתיחה, ראשונות, עיקריות וקינוח. הבחירה הנכונה לרוב האירועים.',
+    includes:['תפריט מלא לבחירתכם','טאבון מקצועי','צוות הגשה','כלים חד־פעמיים איכותיים'],
+  },
+  {
+    id:'tasting', roman:'II', name:'ארוחת טעימות', price:250,
+    tagline:'עונתי. עשיר.',
+    blurb:'כל מה שיש בחוויה הקולינרית, בתוספת 2 מנות טאפאס מהטאבון המשתנות לפי עונה — לחוויית טעמים עשירה יותר.',
+    includes:['כל מה שבחוויה קולינרית','2 מנות טאפאס עונתיות','מהטאבון ישירות לצלחת','מגוון טעמים מורחב'],
+  },
+  {
+    id:'premium', roman:'III', name:'פרימיום', price:290,
+    tagline:'האירוע המלא.',
+    blurb:'חווית הטעימות במלואה, פלוס עריכת שולחן איכותית — ללא חד־פעמי. הגירסה המושקעת ביותר של אביקו.',
+    includes:['כל מה שבארוחת טעימות','עריכת שולחן איכותית','ללא כלים חד־פעמיים','חוויה מלאה מא׳ ועד ת׳'],
+  },
+];
+const buildWhatsAppURL = (pkgId) => {
+  const p = PACKAGES.find(x => x.id === pkgId);
+  const lines = [
+    'היי אביקו 👋',
+    'אשמח לקבל הצעה לאירוע.',
+    '',
+    p ? `המסלול שמעניין אותי: ${p.name} (${p.price}₪ לסועד)` : 'עוד לא החלטתי על מסלול.',
+    '',
+    'פרטים נוספים:',
+    '• תאריך משוער:',
+    '• מספר סועדים:',
+    '• מיקום:',
+    '• הערות:',
+  ];
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+};
+
 // ---------- Logo (custom, original) ----------
 const Logo = ({ size = 32, color = "var(--paper)" }) => (
   <div style={{display:'flex',alignItems:'center',gap:10}}>
@@ -505,26 +543,7 @@ const Menu = () => {
 
 // ---------- Packages ----------
 const Packages = ({ highlighted, setHighlighted }) => {
-  const pkgs = [
-    {
-      id:'experience', roman:'I', name:'חוויה קולינרית', price:230,
-      tagline:'הקלאסיקה.',
-      blurb:'ארוחה מלאה מלאה בתפריט שלנו — פתיחה, ראשונות, עיקריות וקינוח. הבחירה הנכונה לרוב האירועים.',
-      includes:['תפריט מלא לבחירתכם','טאבון מקצועי','צוות הגשה','כלים חד־פעמיים איכותיים'],
-    },
-    {
-      id:'tasting', roman:'II', name:'ארוחת טעימות', price:250,
-      tagline:'עונתי. עשיר.',
-      blurb:'כל מה שיש בחוויה הקולינרית, בתוספת 2 מנות טאפאס מהטאבון המשתנות לפי עונה — לחוויית טעמים עשירה יותר.',
-      includes:['כל מה שבחוויה קולינרית','2 מנות טאפאס עונתיות','מהטאבון ישירות לצלחת','מגוון טעמים מורחב'],
-    },
-    {
-      id:'premium', roman:'III', name:'פרימיום', price:290,
-      tagline:'האירוע המלא.',
-      blurb:'חווית הטעימות במלואה, פלוס עריכת שולחן איכותית — ללא חד־פעמי. הגירסה המושקעת ביותר של אביקו.',
-      includes:['כל מה שבארוחת טעימות','עריכת שולחן איכותית','ללא כלים חד־פעמיים','חוויה מלאה מא׳ ועד ת׳'],
-    },
-  ];
+  const pkgs = PACKAGES;
 
   return (
     <section id="packages" style={{padding:'140px 0 120px',background:'var(--ink)',position:'relative'}}>
@@ -587,8 +606,8 @@ const Packages = ({ highlighted, setHighlighted }) => {
                   ))}
                 </div>
 
-                <a href="#contact" className={isHigh ? 'btn btn-primary' : 'btn btn-ghost'} style={{width:'100%',justifyContent:'center'}}>
-                  הזמנה — {p.name}
+                <a href={buildWhatsAppURL(p.id)} target="_blank" rel="noopener" className={isHigh ? 'btn btn-primary' : 'btn btn-ghost'} style={{width:'100%',justifyContent:'center'}}>
+                  הזמנה בוואטסאפ — {p.name}
                 </a>
               </div>
             );
@@ -674,15 +693,14 @@ const Quote = () => (
 );
 
 // ---------- Contact / CTA ----------
-const Contact = () => {
-  const [form, setForm] = useState({ name:'', phone:'', date:'', guests:'20', pkg:'tasting', notes:'' });
-  const [sent, setSent] = useState(false);
-  const submit = (e) => { e.preventDefault(); setSent(true); setTimeout(()=>setSent(false), 4000); };
+const Contact = ({ highlighted }) => {
+  const selected = PACKAGES.find(p => p.id === highlighted) || PACKAGES[0];
+  const whatsappURL = buildWhatsAppURL(selected.id);
 
   return (
     <section id="contact" style={{padding:'140px 0 80px',background:'var(--ink)',position:'relative',overflow:'hidden'}}>
       <div className="container">
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:80}}>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:80,alignItems:'start'}}>
           <div>
             <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— יצירת קשר</div>
             <h2 className="serif" style={{fontSize:'clamp(42px,5vw,72px)',lineHeight:1.05,fontWeight:400,margin:'0 0 28px',letterSpacing:'-0.02em'}}>
@@ -690,11 +708,11 @@ const Contact = () => {
               יחד.
             </h2>
             <p style={{fontSize:17,lineHeight:1.7,color:'var(--paper)',opacity:0.78,marginBottom:40,maxWidth:460}}>
-              השאירו פרטים ונחזור אליכם תוך יום עסקים עם הצעה מותאמת. או התקשרו ישירות — אנחנו אוהבים לדבר.
+              לחצו על הוואטסאפ — ההודעה תיפתח עם פרטי המסלול שבחרתם. או התקשרו ישירות, אנחנו אוהבים לדבר.
             </p>
 
             <div style={{display:'flex',flexDirection:'column',gap:20}}>
-              <a href="tel:0547432200" style={{display:'flex',alignItems:'center',gap:16,padding:'18px 20px',border:'1px solid var(--rule)',borderRadius:8,transition:'all .25s'}}
+              <a href="tel:+972547432200" style={{display:'flex',alignItems:'center',gap:16,padding:'18px 20px',border:'1px solid var(--rule)',borderRadius:8,transition:'all .25s'}}
                  onMouseEnter={e=>e.currentTarget.style.borderColor='var(--ember)'}
                  onMouseLeave={e=>e.currentTarget.style.borderColor='var(--rule)'}>
                 <div style={{width:44,height:44,borderRadius:'50%',background:'var(--ember)',color:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center'}}>
@@ -705,7 +723,7 @@ const Contact = () => {
                   <div style={{fontSize:18,fontWeight:500}}><span className="ltr">054-743-2200</span></div>
                 </div>
               </a>
-              <a href="#" style={{display:'flex',alignItems:'center',gap:16,padding:'18px 20px',border:'1px solid var(--rule)',borderRadius:8,transition:'all .25s'}}
+              <a href={whatsappURL} target="_blank" rel="noopener" style={{display:'flex',alignItems:'center',gap:16,padding:'18px 20px',border:'1px solid var(--rule)',borderRadius:8,transition:'all .25s'}}
                  onMouseEnter={e=>e.currentTarget.style.borderColor='var(--ember)'}
                  onMouseLeave={e=>e.currentTarget.style.borderColor='var(--rule)'}>
                 <div style={{width:44,height:44,borderRadius:'50%',background:'var(--ember)',color:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center'}}>
@@ -716,7 +734,7 @@ const Contact = () => {
                   <div style={{fontSize:18,fontWeight:500}}>להודעה מהירה</div>
                 </div>
               </a>
-              <a href="#" style={{display:'flex',alignItems:'center',gap:16,padding:'18px 20px',border:'1px solid var(--rule)',borderRadius:8,transition:'all .25s'}}
+              <a href="https://www.instagram.com/avikco" target="_blank" rel="noopener" style={{display:'flex',alignItems:'center',gap:16,padding:'18px 20px',border:'1px solid var(--rule)',borderRadius:8,transition:'all .25s'}}
                  onMouseEnter={e=>e.currentTarget.style.borderColor='var(--ember)'}
                  onMouseLeave={e=>e.currentTarget.style.borderColor='var(--rule)'}>
                 <div style={{width:44,height:44,borderRadius:'50%',background:'var(--ember)',color:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center'}}>
@@ -730,53 +748,56 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Form */}
-          <form onSubmit={submit} style={{background:'var(--ink-2)',border:'1px solid var(--rule)',borderRadius:12,padding:40}}>
-            <h3 className="serif" style={{fontSize:28,margin:'0 0 28px',fontWeight:700}}>טופס פנייה מהיר</h3>
+          {/* WhatsApp CTA card */}
+          <div style={{background:'var(--ink-2)',border:'1px solid var(--rule)',borderRadius:12,padding:40,position:'relative'}}>
+            <div className="tick" style={{color:'var(--paper-muted)',marginBottom:18}}>— שליחת פנייה</div>
+            <h3 className="serif" style={{fontSize:32,margin:'0 0 14px',fontWeight:400,letterSpacing:'-0.01em',lineHeight:1.1}}>
+              הזמנה מהירה ב<em>וואטסאפ</em>.
+            </h3>
+            <p style={{fontSize:15,lineHeight:1.65,color:'var(--paper)',opacity:0.72,margin:'0 0 28px'}}>
+              לחיצה אחת, וההודעה תיפתח אצלכם כשהמסלול שבחרתם כבר רשום בפנים. תשלימו תאריך, כמות סועדים ומיקום — ונחזור אליכם עם הצעה מותאמת.
+            </p>
 
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
-              <Field label="שם מלא" value={form.name} onChange={v=>setForm({...form,name:v})} placeholder="ישראל ישראלי"/>
-              <Field label="טלפון" value={form.phone} onChange={v=>setForm({...form,phone:v})} placeholder="050-0000000" type="tel"/>
+            <div style={{background:'var(--ink)',border:'1px solid var(--rule)',borderRadius:10,padding:'20px 22px',marginBottom:24}}>
+              <div className="mono" style={{fontSize:11,color:'var(--paper-muted)',letterSpacing:'0.15em',marginBottom:10}}>המסלול שנבחר</div>
+              <div style={{display:'flex',alignItems:'baseline',justifyContent:'space-between',gap:14,flexWrap:'wrap'}}>
+                <div>
+                  <span className="ornament-num" style={{fontSize:22,color:'var(--ember)',marginLeft:8}}>{selected.roman}</span>
+                  <span className="serif" style={{fontSize:24,fontWeight:500}}>{selected.name}</span>
+                </div>
+                <div style={{fontSize:15,color:'var(--paper-muted)'}}>
+                  <span className="ltr" style={{color:'var(--paper)',fontWeight:600,fontSize:18}}>{selected.price}</span>
+                  <span> ₪ לסועד</span>
+                </div>
+              </div>
+              <div style={{marginTop:12,display:'flex',gap:8,flexWrap:'wrap'}}>
+                {PACKAGES.map(p => (
+                  <span key={p.id} style={{
+                    fontSize:12,padding:'5px 11px',borderRadius:999,
+                    border:'1px solid ' + (p.id===selected.id ? 'var(--ember)' : 'var(--rule)'),
+                    color: p.id===selected.id ? 'var(--ember)' : 'var(--paper-muted)',
+                    background: p.id===selected.id ? 'rgba(0,0,0,0.25)' : 'transparent'
+                  }}>{p.name}</span>
+                ))}
+              </div>
+              <div style={{marginTop:14,fontSize:12,color:'var(--paper-muted)',lineHeight:1.5}}>
+                לא המסלול הנכון? בחרו אחר בסעיף <a href="#packages" style={{color:'var(--ember)',borderBottom:'1px solid var(--ember)'}}>המסלולים</a> וההודעה תתעדכן.
+              </div>
             </div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
-              <Field label="תאריך האירוע" value={form.date} onChange={v=>setForm({...form,date:v})} type="date"/>
-              <Field label="מספר סועדים" value={form.guests} onChange={v=>setForm({...form,guests:v})} type="number"/>
+
+            <a href={whatsappURL} target="_blank" rel="noopener" className="btn btn-primary" style={{width:'100%',justifyContent:'center',padding:'16px',fontSize:16,fontWeight:600,background:'#25D366',color:'#fff'}}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.253 18.494l.724.423A7.953 7.953 0 0012 20a8 8 0 10-8-8 7.95 7.95 0 001.08 4.023l.436.74-.919 3.34 3.656-.61zM2.004 22l1.352-4.968A9.954 9.954 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.954 9.954 0 01-5.03-1.355L2.004 22z"/></svg>
+              פתיחת שיחה בוואטסאפ
+            </a>
+            <div style={{marginTop:14,textAlign:'center',fontSize:12,color:'var(--paper-muted)'}}>
+              ההודעה מוכנה מראש — רק ללחוץ שלח.
             </div>
-
-            <label style={{display:'block',marginBottom:16}}>
-              <div className="mono" style={{fontSize:11,color:'var(--paper-muted)',letterSpacing:'0.1em',marginBottom:8}}>מסלול מועדף</div>
-              <select value={form.pkg} onChange={e=>setForm({...form,pkg:e.target.value})}
-                style={{width:'100%',padding:'14px 16px',background:'var(--ink)',color:'var(--paper)',border:'1px solid var(--rule)',borderRadius:8,fontFamily:'inherit',fontSize:15}}>
-                <option value="experience">חוויה קולינרית — 230₪</option>
-                <option value="tasting">ארוחת טעימות — 250₪</option>
-                <option value="premium">פרימיום — 290₪</option>
-                <option value="unsure">עוד לא החלטתי</option>
-              </select>
-            </label>
-
-            <label style={{display:'block',marginBottom:24}}>
-              <div className="mono" style={{fontSize:11,color:'var(--paper-muted)',letterSpacing:'0.1em',marginBottom:8}}>הערות / העדפות</div>
-              <textarea value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})} rows={3} placeholder="אלרגיות, העדפות תזונתיות, סגנון האירוע…"
-                style={{width:'100%',padding:'14px 16px',background:'var(--ink)',color:'var(--paper)',border:'1px solid var(--rule)',borderRadius:8,fontFamily:'inherit',fontSize:15,resize:'vertical'}}/>
-            </label>
-
-            <button type="submit" className="btn btn-primary" style={{width:'100%',justifyContent:'center',padding:'16px'}}>
-              {sent ? '✓ נשלח — נחזור אליכם בקרוב' : 'שליחת בקשת הצעה'}
-            </button>
-          </form>
+          </div>
         </div>
       </div>
     </section>
   );
 };
-
-const Field = ({label, value, onChange, placeholder, type='text'}) => (
-  <label style={{display:'block'}}>
-    <div className="mono" style={{fontSize:11,color:'var(--paper-muted)',letterSpacing:'0.1em',marginBottom:8}}>{label}</div>
-    <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
-      style={{width:'100%',padding:'14px 16px',background:'var(--ink)',color:'var(--paper)',border:'1px solid var(--rule)',borderRadius:8,fontFamily:'inherit',fontSize:15,direction: type==='tel'||type==='number'||type==='date'?'ltr':'rtl'}}/>
-  </label>
-);
 
 // ---------- Footer ----------
 const Footer = () => (
@@ -870,7 +891,7 @@ const App = () => {
       <Packages highlighted={state.highlightedPackage} setHighlighted={(v)=>setState({ ...state, highlightedPackage: v })}/>
       <Quote />
       <Gallery />
-      <Contact />
+      <Contact highlighted={state.highlightedPackage} />
       <Footer />
     </>
   );
