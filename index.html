@@ -74,7 +74,7 @@
   .reveal.in{opacity:1;transform:none}
 
   /* Marquee */
-  .marquee{display:flex;gap:64px;animation:scroll 40s linear infinite;white-space:nowrap}
+  .marquee{display:flex;gap:64px;animation:scroll 26s linear infinite;white-space:nowrap}
   @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   /* Buttons */
@@ -97,6 +97,7 @@
   .ph-stripes{background-image:repeating-linear-gradient(135deg, rgba(244,238,220,0.06) 0 10px, rgba(244,238,220,0.02) 10px 20px);background-color:var(--ink-2)}
 
   /* Parallax hero image subtle zoom */
+  .hero-bg{object-position:center 35%}
   .kenburns{animation:kb 18s ease-in-out infinite alternate}
   @keyframes kb{from{transform:scale(1.04)}to{transform:scale(1.12)}}
 
@@ -208,9 +209,19 @@
     /* Headlines across sections */
     .h-serif-lg{font-size:38px !important;line-height:1.05 !important}
 
-    /* Marquee: slow+small */
-    .marquee{animation-duration:22s !important}
+    /* Marquee: faster + smaller text on mobile */
+    .marquee{animation-duration:18s !important}
     .marquee .serif{font-size:26px !important}
+
+    /* Hero image: slow horizontal pan instead of the desktop ken-burns zoom,
+       so the motion (chef loading the oven) reads clearly at small sizes.
+       Uses transform (GPU-reliable) rather than object-position (Chrome
+       refuses to interpolate it consistently between percentages). */
+    .kenburns{animation:mobilePan 14s ease-in-out infinite alternate !important}
+    @keyframes mobilePan{
+      from{transform:scale(1.35) translateX(7%)}
+      to  {transform:scale(1.35) translateX(-7%)}
+    }
 
     /* Footer big italic word */
     .footer-word{font-size:56px !important;letter-spacing:-0.02em !important}
@@ -347,8 +358,8 @@ const Hero = () => {
     <section style={{position:'relative',minHeight:'100vh',overflow:'hidden'}}>
       {/* background image */}
       <div style={{position:'absolute',inset:0,zIndex:0}}>
-        <img src="assets/chef-oven.jpeg" className="kenburns"
-          style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center 35%'}}/>
+        <img src="assets/chef-oven.jpeg" className="kenburns hero-bg"
+          style={{width:'100%',height:'100%',objectFit:'cover'}}/>
         <div className="hero-mask" style={{position:'absolute',inset:0}}/>
       </div>
 
@@ -540,7 +551,7 @@ const Kitchen = () => {
 
 // ---------- Menu Showcase ----------
 const Menu = () => {
-  const [tab, setTab] = useState('pizza');
+  const [tab, setTab] = useState('opening');
   const tabs = [
     { id:'opening',   label:'פתיחה',     title:'פוקצ׳ות תיבול',  dish:'פוקצ׳ה בתיבול מרמה, קונפי שום ועשבי תיבול — אפויה בטאבון', img:'assets/antipasti.jpeg', items:['פוקצ׳ה בתיבול מרמה','קונפי שום','עשבי תיבול טריים'] },
     { id:'first',     label:'ראשונות',   title:'סלטים וקרצ׳ופי', dish:'סלט שוק — עלי בייבי, עגבניות שרי, מלפפון, בצל סגול, שברי פקאן וגבינת פטה', img:'assets/caesar-salad.jpeg', items:['סלט שוק','סלט פנצנלה','טבולאבנה','קרצ׳ופי אלה רומנה','ארנצ׳יני ירוקים'] },
