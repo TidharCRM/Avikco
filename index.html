@@ -903,6 +903,20 @@ const Footer = () => (
         Avikco — Buon appetito.
       </div>
     </div>
+    <div className="container" style={{marginTop:24,display:'flex',justifyContent:'center'}}>
+      <a href={`https://wa.me/972526331295?text=${encodeURIComponent('היי הגעתי מדף הנחיתה של אביקו')}`}
+         target="_blank" rel="noopener"
+         className="mono"
+         style={{
+           fontSize:11,letterSpacing:'0.25em',color:'var(--paper-muted)',
+           display:'inline-flex',alignItems:'center',gap:8,opacity:0.6,
+           transition:'opacity .2s, color .2s'
+         }}
+         onMouseEnter={e=>{e.currentTarget.style.opacity=1;e.currentTarget.style.color='var(--ember)';}}
+         onMouseLeave={e=>{e.currentTarget.style.opacity=0.6;e.currentTarget.style.color='var(--paper-muted)';}}>
+        POWERED BY KLIX
+      </a>
+    </div>
   </footer>
 );
 
