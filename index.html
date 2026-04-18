@@ -140,6 +140,73 @@
 
   /* Full-bleed */
   .bleed{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:860px){
+    /* Nav: drop desktop links, keep logo + CTA */
+    .nav-links{display:none !important}
+    nav .btn-primary{padding:9px 14px !important;font-size:12px !important}
+
+    /* Universal section paddings */
+    section{padding-top:70px !important;padding-bottom:70px !important}
+
+    /* Every 2+ column grid collapses to one column */
+    .m-stack{grid-template-columns:1fr !important;gap:40px !important}
+
+    /* Hero */
+    .hero-eyebrow .flex-rule{display:none !important}
+    .hero-eyebrow .eyebrow-num{display:none !important}
+    .hero-eyebrow{font-size:10px !important;gap:10px !important;flex-wrap:wrap !important}
+    .hero-grid{grid-template-columns:1fr !important;gap:36px !important;margin-top:36px !important}
+    .hero-headline{font-size:44px !important;line-height:1.02 !important}
+    .hero-right{align-items:flex-start !important;flex-direction:row !important;flex-wrap:wrap !important;gap:16px !important;width:100% !important}
+    .hero-sticker{width:120px !important;height:120px !important}
+    .hero-sticker .serif{font-size:32px !important}
+    .hero-incl{width:100% !important;flex:1 1 auto !important}
+    .hero-scroll-hint{margin-top:30px !important}
+
+    /* Kitchen steps: 4 cols → 1 col stacked */
+    .steps-grid{grid-template-columns:1fr !important}
+    .steps-grid > div{border-left:none !important;border-bottom:1px solid var(--rule) !important;padding:24px 2px !important}
+    .steps-grid > div:last-child{border-bottom:none !important}
+    .steps-grid .ornament-num{font-size:48px !important;margin-bottom:8px !important}
+
+    /* Menu tabs: horizontal scroll */
+    .menu-tabs{overflow-x:auto !important;flex-wrap:nowrap !important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .menu-tabs::-webkit-scrollbar{display:none}
+    .menu-tabs button{white-space:nowrap !important;padding:14px 16px !important;font-size:14px !important}
+    .menu-content img{height:280px !important}
+
+    /* Packages: 3 cols → 1 col */
+    .pkg-grid{grid-template-columns:1fr !important;gap:16px !important}
+    .pkg-grid > div{padding:28px 22px !important}
+
+    /* Gallery: 4 cols → 2 cols, ignore spans */
+    .gallery-grid{grid-template-columns:1fr 1fr !important;grid-auto-rows:150px !important;gap:8px !important}
+    .gallery-grid > *{grid-column:auto !important}
+
+    /* Contact: two-up becomes stacked */
+    .contact-grid{grid-template-columns:1fr !important;gap:50px !important}
+
+    /* About / Kitchen / Menu heading rows */
+    .section-head{flex-direction:column !important;align-items:flex-start !important;gap:16px !important}
+
+    /* Headlines across sections */
+    .h-serif-lg{font-size:38px !important;line-height:1.05 !important}
+
+    /* Marquee: slow+small */
+    .marquee{animation-duration:22s !important}
+    .marquee .serif{font-size:26px !important}
+
+    /* Footer big italic word */
+    .footer-word{font-size:56px !important;letter-spacing:-0.02em !important}
+
+    /* Quote */
+    .quote-mark{font-size:80px !important}
+
+    /* Container shim */
+    .container{padding:0 18px !important}
+  }
 </style>
 </head>
 <body>
@@ -273,18 +340,18 @@ const Hero = () => {
 
       <div className="container" style={{position:'relative',zIndex:2,paddingTop:160,paddingBottom:80,minHeight:'100vh',display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
         {/* Top eyebrow row */}
-        <div style={{display:'flex',alignItems:'center',gap:14,opacity:0.85}}>
+        <div className="hero-eyebrow" style={{display:'flex',alignItems:'center',gap:14,opacity:0.85}}>
           <span className="flag"><span/><span/><span/></span>
           <span className="tick" style={{color:'var(--paper)'}}>מטבח איטלקי נודד · ישראל · 2019</span>
-          <div style={{flex:1,height:1,background:'var(--rule)'}}/>
-          <span className="tick" style={{color:'var(--paper-muted)'}}>№ 001</span>
+          <div className="flex-rule" style={{flex:1,height:1,background:'var(--rule)'}}/>
+          <span className="tick eyebrow-num" style={{color:'var(--paper-muted)'}}>№ 001</span>
         </div>
 
         {/* headline block */}
-        <div style={{display:'grid',gridTemplateColumns:'1.3fr 1fr',gap:60,alignItems:'end',marginTop:60}}>
+        <div className="hero-grid" style={{display:'grid',gridTemplateColumns:'1.3fr 1fr',gap:60,alignItems:'end',marginTop:60}}>
           <div>
             <div className="hand" style={{fontSize:44,color:'var(--ember)',marginBottom:6,transform:'rotate(-2deg)',display:'inline-block'}}>Benvenuti —</div>
-            <h1 className="serif" style={{
+            <h1 className="serif hero-headline" style={{
               fontSize:'clamp(48px, 7.2vw, 118px)',
               lineHeight:0.95,
               fontWeight:500,
@@ -313,8 +380,8 @@ const Hero = () => {
           </div>
 
           {/* right column: stats + sticker */}
-          <div style={{display:'flex',flexDirection:'column',gap:24,alignItems:'flex-end'}}>
-            <div className="sticker" style={{
+          <div className="hero-right" style={{display:'flex',flexDirection:'column',gap:24,alignItems:'flex-end'}}>
+            <div className="sticker hero-sticker" style={{
               background:'var(--paper)',color:'var(--ink)',
               padding:'18px 22px',borderRadius:'50%',width:160,height:160,
               display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
@@ -326,7 +393,7 @@ const Hero = () => {
               <div className="mono" style={{fontSize:9,letterSpacing:'0.2em',opacity:0.7}}>PER PERSON</div>
             </div>
 
-            <div style={{background:'rgba(14,13,11,0.55)',backdropFilter:'blur(8px)',border:'1px solid var(--rule)',padding:20,borderRadius:14,width:260}}>
+            <div className="hero-incl" style={{background:'rgba(14,13,11,0.55)',backdropFilter:'blur(8px)',border:'1px solid var(--rule)',padding:20,borderRadius:14,width:260}}>
               <div className="tick" style={{color:'var(--paper-muted)',marginBottom:10}}>— מה כלול</div>
               {[
                 ['🍕','טאבון + עמדות עבודה'],
@@ -343,7 +410,7 @@ const Hero = () => {
         </div>
 
         {/* scroll hint */}
-        <div style={{display:'flex',alignItems:'center',gap:12,marginTop:60,color:'var(--paper-muted)'}}>
+        <div className="hero-scroll-hint" style={{display:'flex',alignItems:'center',gap:12,marginTop:60,color:'var(--paper-muted)'}}>
           <div style={{width:40,height:1,background:'var(--paper-muted)'}}/>
           <span className="tick">גלילה להמשך</span>
         </div>
@@ -375,7 +442,7 @@ const About = () => {
   return (
     <section id="about" style={{padding:'120px 0',background:'var(--ink)',position:'relative'}}>
       <div className="container">
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1.2fr',gap:80,alignItems:'start'}}>
+        <div className="m-stack" style={{display:'grid',gridTemplateColumns:'1fr 1.2fr',gap:80,alignItems:'start'}}>
           {/* Left: image stack */}
           <div style={{position:'relative'}}>
             <img src="assets/chef-bread.jpeg" style={{width:'100%',borderRadius:6,filter:'grayscale(0.1) contrast(1.05)'}}/>
@@ -424,10 +491,10 @@ const Kitchen = () => {
   return (
     <section id="kitchen" style={{padding:'140px 0 120px',background:'var(--ink-2)',position:'relative',overflow:'hidden'}}>
       <div className="container">
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:60,alignItems:'center',marginBottom:80}}>
+        <div className="m-stack" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:60,alignItems:'center',marginBottom:80}}>
           <div>
             <div className="tick" style={{color:'var(--ember)',marginBottom:18}}>— המטבח הנודד</div>
-            <h2 className="serif" style={{fontSize:'clamp(38px,4.5vw,60px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em'}}>
+            <h2 className="serif h-serif-lg" style={{fontSize:'clamp(38px,4.5vw,60px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em'}}>
               ארבעה שלבים <em>מהטאבון</em><br/>
               לצלחת שלכם.
             </h2>
@@ -437,7 +504,7 @@ const Kitchen = () => {
           </div>
         </div>
 
-        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:0,borderTop:'1px solid var(--rule)'}}>
+        <div className="steps-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:0,borderTop:'1px solid var(--rule)'}}>
           {steps.map((s,i)=>(
             <div key={s.n} style={{
               padding:'32px 28px 32px 28px',
@@ -472,10 +539,10 @@ const Menu = () => {
   return (
     <section id="menu" style={{padding:'140px 0 120px',background:'var(--paper)',color:'var(--ink)'}}>
       <div className="container">
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'end',marginBottom:40,flexWrap:'wrap',gap:20}}>
+        <div className="section-head" style={{display:'flex',justifyContent:'space-between',alignItems:'end',marginBottom:40,flexWrap:'wrap',gap:20}}>
           <div>
             <div className="tick" style={{color:'var(--ember-deep)',marginBottom:14}}>— התפריט</div>
-            <h2 className="serif" style={{fontSize:'clamp(40px,5vw,68px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em'}}>
+            <h2 className="serif h-serif-lg" style={{fontSize:'clamp(40px,5vw,68px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em'}}>
               מה תאכלו <em>אצלנו</em>.
             </h2>
           </div>
@@ -485,7 +552,7 @@ const Menu = () => {
         </div>
 
         {/* Tabs */}
-        <div style={{display:'flex',gap:6,borderBottom:'1px solid var(--paper-muted)',marginBottom:40,flexWrap:'wrap'}}>
+        <div className="menu-tabs" style={{display:'flex',gap:6,borderBottom:'1px solid var(--paper-muted)',marginBottom:40,flexWrap:'wrap'}}>
           {tabs.map(t=>(
             <button key={t.id} onClick={()=>setTab(t.id)}
               style={{
@@ -502,7 +569,7 @@ const Menu = () => {
         </div>
 
         {/* Content */}
-        <div style={{display:'grid',gridTemplateColumns:'1.1fr 1fr',gap:60,alignItems:'center'}}>
+        <div className="m-stack menu-content" style={{display:'grid',gridTemplateColumns:'1.1fr 1fr',gap:60,alignItems:'center'}}>
           <div style={{position:'relative'}}>
             <img key={active.img} src={active.img} style={{
               width:'100%',height:520,objectFit:'cover',borderRadius:8,
@@ -550,7 +617,7 @@ const Packages = ({ highlighted, setHighlighted }) => {
       <div className="container">
         <div style={{textAlign:'center',marginBottom:70}}>
           <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— המסלולים שלנו</div>
-          <h2 className="serif" style={{fontSize:'clamp(42px,5vw,72px)',lineHeight:1.05,fontWeight:400,margin:'0 0 16px',letterSpacing:'-0.02em'}}>
+          <h2 className="serif h-serif-lg" style={{fontSize:'clamp(42px,5vw,72px)',lineHeight:1.05,fontWeight:400,margin:'0 0 16px',letterSpacing:'-0.02em'}}>
             בחרו את <em>הסגנון</em> שלכם.
           </h2>
           <p style={{fontSize:17,color:'var(--paper-muted)',maxWidth:560,margin:'0 auto',lineHeight:1.6}}>
@@ -558,7 +625,7 @@ const Packages = ({ highlighted, setHighlighted }) => {
           </p>
         </div>
 
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24}}>
+        <div className="pkg-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24}}>
           {pkgs.map(p=>{
             const isHigh = highlighted === p.id;
             return (
@@ -639,18 +706,18 @@ const Gallery = () => {
   return (
     <section id="gallery" style={{padding:'140px 0 120px',background:'var(--ink-2)'}}>
       <div className="container">
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'end',marginBottom:50,flexWrap:'wrap',gap:20}}>
+        <div className="section-head" style={{display:'flex',justifyContent:'space-between',alignItems:'end',marginBottom:50,flexWrap:'wrap',gap:20}}>
           <div>
             <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— הגלריה</div>
-            <h2 className="serif" style={{fontSize:'clamp(38px,4.5vw,60px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em'}}>
+            <h2 className="serif h-serif-lg" style={{fontSize:'clamp(38px,4.5vw,60px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em'}}>
               רגעים <em>מהאירועים</em>.
             </h2>
           </div>
-          <a href="#" style={{fontSize:14,color:'var(--paper-muted)',borderBottom:'1px solid var(--paper-muted)',paddingBottom:2}}>
+          <a href="https://www.instagram.com/avikco" target="_blank" rel="noopener" style={{fontSize:14,color:'var(--paper-muted)',borderBottom:'1px solid var(--paper-muted)',paddingBottom:2}}>
             עוד באינסטגרם →
           </a>
         </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gridAutoRows:'220px',gap:14}}>
+        <div className="gallery-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gridAutoRows:'220px',gap:14}}>
           {imgs.map((im,i)=>(
             <div key={i} className="tilt" style={{
               gridColumn:`span ${im.span}`,
@@ -677,7 +744,7 @@ const Gallery = () => {
 const Quote = () => (
   <section style={{padding:'120px 0',background:'var(--paper)',color:'var(--ink)'}}>
     <div className="container" style={{textAlign:'center',maxWidth:900,margin:'0 auto'}}>
-      <div className="serif" style={{fontSize:120,color:'var(--ember-deep)',lineHeight:0.5,marginBottom:10}}>“</div>
+      <div className="serif quote-mark" style={{fontSize:120,color:'var(--ember-deep)',lineHeight:0.5,marginBottom:10}}>“</div>
       <p className="serif" style={{fontSize:'clamp(28px,3.5vw,44px)',lineHeight:1.3,fontWeight:400,fontStyle:'italic',margin:'0 0 32px'}}>
         האירוע הכי טעים שהיה לנו. הסועדים לא הפסיקו לדבר על הפיצות — והאמת, גם אנחנו לא.
       </p>
@@ -700,7 +767,7 @@ const Contact = ({ highlighted }) => {
   return (
     <section id="contact" style={{padding:'140px 0 80px',background:'var(--ink)',position:'relative',overflow:'hidden'}}>
       <div className="container">
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:80,alignItems:'start'}}>
+        <div className="contact-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:80,alignItems:'start'}}>
           <div>
             <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— יצירת קשר</div>
             <h2 className="serif" style={{fontSize:'clamp(42px,5vw,72px)',lineHeight:1.05,fontWeight:400,margin:'0 0 28px',letterSpacing:'-0.02em'}}>
@@ -814,7 +881,7 @@ const Footer = () => (
       </div>
     </div>
     <div className="container" style={{marginTop:40,paddingTop:30,borderTop:'1px solid var(--rule)',opacity:0.5}}>
-      <div className="serif" style={{fontSize:'clamp(60px,14vw,220px)',lineHeight:0.9,fontWeight:700,letterSpacing:'-0.04em',color:'var(--ink-3)',textAlign:'center',fontStyle:'italic'}}>
+      <div className="serif footer-word" style={{fontSize:'clamp(60px,14vw,220px)',lineHeight:0.9,fontWeight:700,letterSpacing:'-0.04em',color:'var(--ink-3)',textAlign:'center',fontStyle:'italic'}}>
         Avikco — Buon appetito.
       </div>
     </div>
