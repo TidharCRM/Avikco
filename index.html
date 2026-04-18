@@ -143,9 +143,23 @@
 
   /* ---------- MOBILE ---------- */
   @media (max-width:860px){
+    /* Kill any horizontal overflow at the document root — prevents
+       the RTL vertical scrollbar (which sits on the visual-left in RTL)
+       from overlapping fixed elements. */
+    html{overflow-x:hidden}
     /* Nav: drop desktop links, keep logo + CTA */
     .nav-links{display:none !important}
-    nav .btn-primary{padding:9px 14px !important;font-size:12px !important}
+    nav{padding-top:12px !important;padding-bottom:12px !important}
+    /* Asymmetric padding: extra on physical-left so the CTA (flex-end
+       in RTL = visual left) clears the RTL scrollbar gutter. */
+    nav .container{padding:0 18px 0 22px !important;gap:10px !important}
+    /* Compact CTA — no chevron, tighter text */
+    nav .btn-primary{padding:8px 14px !important;font-size:12px !important;gap:6px !important;white-space:nowrap}
+    nav .btn-primary svg{display:none !important}
+    /* Compact logo — hide small AVIKCO·EST subtitle, shrink brand */
+    nav .mono{display:none !important}
+    nav svg{width:26px !important;height:26px !important}
+    nav .serif{font-size:18px !important}
 
     /* Universal section paddings */
     section{padding-top:70px !important;padding-bottom:70px !important}
