@@ -770,13 +770,6 @@ const Packages = ({ highlighted, setHighlighted }) => {
 
         {/* Event formats — own section, sticker cards on warm-glow backdrop */}
         <div className="events-wrapper">
-          <div style={{textAlign:'center',marginBottom:60,position:'relative'}}>
-            <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— סגנונות אירוע נוספים</div>
-            <h3 className="serif" style={{fontSize:'clamp(34px,4vw,52px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em',color:'var(--paper)'}}>
-              לאירועי <em>קוקטייל</em> וקבלות פנים.
-            </h3>
-          </div>
-
           {eventPkgs.map((p) => {
             const isBuffet = p.id === 'buffet';
             return (
