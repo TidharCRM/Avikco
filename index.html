@@ -273,10 +273,16 @@ const PACKAGES = [
     includes:['תפריט ארוחה מלאה לבחירתכם','שדרוג התפריט ב־2 מנות נוספות','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם','עריכת שולחן מלאה — צלחות, כוסות וסכו״ם'],
   },
   {
-    id:'buffet', roman:'IV', name:'בופה ועמדת פיצות', price:null,
-    tagline:'קוקטייל. עמדה חיה.',
-    blurb:'עמדת פיצות חיה ובופה איטלקי — לאירועי קוקטייל, קבלות פנים ואירועים חברתיים. התאמה אישית לכל אירוע.',
-    includes:['עמדת פיצות חיה בטאבון','בופה איטלקי מגוון','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
+    id:'buffet', roman:'IV', name:'אירוע בופה', price:null,
+    tagline:'בופה איטלקי.',
+    blurb:'מגוון מנות איטלקיות בהגשת בופה — לאירועי קוקטייל, קבלות פנים ואירועים חברתיים.',
+    includes:['בופה איטלקי מגוון','מנות מתחלפות לפי האירוע','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
+  },
+  {
+    id:'pizza-station', roman:'V', name:'עמדת פיצות', price:null,
+    tagline:'עמדה חיה.',
+    blurb:'עמדת פיצות חיה בטאבון — פיצות נאפוליטניות נאפות מול האורחים, אחת־אחת, חמות ישר לצלחת.',
+    includes:['עמדת פיצות חיה בטאבון','פיצות נאפות מול האורחים','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
   },
 ];
 const buildWhatsAppURL = (pkgId) => {
@@ -639,7 +645,71 @@ const Menu = () => {
 
 // ---------- Packages ----------
 const Packages = ({ highlighted, setHighlighted }) => {
-  const pkgs = PACKAGES;
+  const mealPkgs = PACKAGES.filter(p => p.price !== null);
+  const eventPkgs = PACKAGES.filter(p => p.price === null);
+
+  const Card = (p) => {
+    const isHigh = highlighted === p.id;
+    return (
+      <div key={p.id}
+        onClick={()=>setHighlighted(p.id)}
+        className={isHigh ? 'pkg-glow' : ''}
+        style={{
+          background: isHigh ? 'var(--ink-3)' : 'var(--ink-2)',
+          border: isHigh ? '1px solid var(--ember)' : '1px solid var(--rule)',
+          borderRadius:10,
+          padding:'36px 32px 32px',
+          cursor:'pointer',
+          transition:'all .35s ease',
+          position:'relative',
+          display:'flex',flexDirection:'column'
+        }}>
+        {isHigh && (
+          <div style={{position:'absolute',top:-12,right:32,background:'var(--ember)',color:'var(--ink)',padding:'4px 12px',borderRadius:999,fontSize:11,fontWeight:600,letterSpacing:'0.1em'}} className="mono">
+            POPULAR
+          </div>
+        )}
+        <div style={{display:'flex',alignItems:'baseline',justifyContent:'space-between',marginBottom:8}}>
+          <span className="ornament-num" style={{fontSize:36,color:'var(--ember)'}}>{p.roman}</span>
+          <span className="tick" style={{color:'var(--paper-muted)'}}>{p.tagline}</span>
+        </div>
+        <h3 className="serif" style={{fontSize:30,fontWeight:400,margin:'0 0 12px',letterSpacing:'-0.01em'}}>{p.name}</h3>
+
+        <div style={{display:'flex',alignItems:'baseline',gap:6,paddingBottom:24,borderBottom:'1px solid var(--rule)',marginBottom:24,minHeight:74}}>
+          {p.price !== null ? (
+            <>
+              <span className="mono" style={{fontSize:12,color:'var(--paper-muted)',letterSpacing:'0.15em',marginLeft:4}}>החל מ־</span>
+              <span className="serif" style={{fontSize:48,fontWeight:700,lineHeight:1,color:'var(--paper)'}}>
+                <span className="ltr">{p.price}</span>
+              </span>
+              <span style={{fontSize:16,color:'var(--paper-muted)'}}>₪ לסועד</span>
+            </>
+          ) : (
+            <span className="serif" style={{fontSize:26,fontWeight:500,lineHeight:1.15,color:'var(--paper)'}}>
+              הצעת מחיר אישית
+            </span>
+          )}
+        </div>
+
+        <p style={{fontSize:15,lineHeight:1.6,color:'var(--paper)',opacity:0.78,marginBottom:24,minHeight:90}}>{p.blurb}</p>
+
+        <div style={{marginBottom:28,flex:1}}>
+          {p.includes.map(i=>(
+            <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,padding:'8px 0',fontSize:14,color:'var(--paper)',opacity:0.88}}>
+              <svg width="14" height="14" viewBox="0 0 14 14" style={{flexShrink:0,marginTop:3}}>
+                <path d="M3 7 L6 10 L11 4" stroke="var(--ember)" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span>{i}</span>
+            </div>
+          ))}
+        </div>
+
+        <a href={buildWhatsAppURL(p.id)} target="_blank" rel="noopener" className={isHigh ? 'btn btn-primary' : 'btn btn-ghost'} style={{width:'100%',justifyContent:'center'}}>
+          הזמנה בוואטסאפ — {p.name}
+        </a>
+      </div>
+    );
+  };
 
   return (
     <section id="packages" style={{padding:'140px 0 120px',background:'var(--ink)',position:'relative'}}>
@@ -650,73 +720,28 @@ const Packages = ({ highlighted, setHighlighted }) => {
             בחרו את <em>הסגנון</em> שלכם.
           </h2>
           <p style={{fontSize:17,color:'var(--paper-muted)',maxWidth:620,margin:'0 auto',lineHeight:1.6}}>
-            ארבעה מסלולים, החל מ־12 סועדים. המחיר לסועד כולל את כל החוויה — מהבצק ועד הקינוח.
+            שלושה מסלולי ארוחה מלאה, החל מ־12 סועדים. המחיר לסועד כולל את כל החוויה — מהבצק ועד הקינוח.
           </p>
         </div>
 
-        <div className="pkg-grid" style={{display:'grid',gridTemplateColumns:'repeat(4, minmax(0,1fr))',gap:20}}>
-          {pkgs.map(p=>{
-            const isHigh = highlighted === p.id;
-            return (
-              <div key={p.id}
-                onClick={()=>setHighlighted(p.id)}
-                className={isHigh ? 'pkg-glow' : ''}
-                style={{
-                  background: isHigh ? 'var(--ink-3)' : 'var(--ink-2)',
-                  border: isHigh ? '1px solid var(--ember)' : '1px solid var(--rule)',
-                  borderRadius:10,
-                  padding:'36px 32px 32px',
-                  cursor:'pointer',
-                  transition:'all .35s ease',
-                  position:'relative',
-                  display:'flex',flexDirection:'column'
-                }}>
-                {isHigh && (
-                  <div style={{position:'absolute',top:-12,right:32,background:'var(--ember)',color:'var(--ink)',padding:'4px 12px',borderRadius:999,fontSize:11,fontWeight:600,letterSpacing:'0.1em'}} className="mono">
-                    POPULAR
-                  </div>
-                )}
-                <div style={{display:'flex',alignItems:'baseline',justifyContent:'space-between',marginBottom:8}}>
-                  <span className="ornament-num" style={{fontSize:36,color:'var(--ember)'}}>{p.roman}</span>
-                  <span className="tick" style={{color:'var(--paper-muted)'}}>{p.tagline}</span>
-                </div>
-                <h3 className="serif" style={{fontSize:30,fontWeight:400,margin:'0 0 12px',letterSpacing:'-0.01em'}}>{p.name}</h3>
+        {/* Meal packages — 3 cards */}
+        <div className="pkg-grid" style={{display:'grid',gridTemplateColumns:'repeat(3, minmax(0,1fr))',gap:22}}>
+          {mealPkgs.map(Card)}
+        </div>
 
-                <div style={{display:'flex',alignItems:'baseline',gap:6,paddingBottom:24,borderBottom:'1px solid var(--rule)',marginBottom:24,minHeight:74}}>
-                  {p.price !== null ? (
-                    <>
-                      <span className="mono" style={{fontSize:12,color:'var(--paper-muted)',letterSpacing:'0.15em',marginLeft:4}}>החל מ־</span>
-                      <span className="serif" style={{fontSize:48,fontWeight:700,lineHeight:1,color:'var(--paper)'}}>
-                        <span className="ltr">{p.price}</span>
-                      </span>
-                      <span style={{fontSize:16,color:'var(--paper-muted)'}}>₪ לסועד</span>
-                    </>
-                  ) : (
-                    <span className="serif" style={{fontSize:26,fontWeight:500,lineHeight:1.15,color:'var(--paper)'}}>
-                      הצעת מחיר אישית
-                    </span>
-                  )}
-                </div>
+        {/* Divider + event formats — separate space */}
+        <div style={{marginTop:110,marginBottom:40,textAlign:'center'}}>
+          <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— סגנונות אירוע נוספים</div>
+          <h3 className="serif" style={{fontSize:'clamp(30px,3.5vw,44px)',lineHeight:1.1,fontWeight:400,margin:'0 0 12px',letterSpacing:'-0.02em',color:'var(--paper)'}}>
+            עמדה חיה או <em>בופה</em>.
+          </h3>
+          <p style={{fontSize:15,color:'var(--paper-muted)',maxWidth:560,margin:'0 auto',lineHeight:1.6}}>
+            לאירועי קוקטייל, קבלות פנים ואירועים חברתיים — התאמה אישית לכל אירוע.
+          </p>
+        </div>
 
-                <p style={{fontSize:15,lineHeight:1.6,color:'var(--paper)',opacity:0.78,marginBottom:24,minHeight:90}}>{p.blurb}</p>
-
-                <div style={{marginBottom:28,flex:1}}>
-                  {p.includes.map(i=>(
-                    <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,padding:'8px 0',fontSize:14,color:'var(--paper)',opacity:0.88}}>
-                      <svg width="14" height="14" viewBox="0 0 14 14" style={{flexShrink:0,marginTop:3}}>
-                        <path d="M3 7 L6 10 L11 4" stroke="var(--ember)" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      <span>{i}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <a href={buildWhatsAppURL(p.id)} target="_blank" rel="noopener" className={isHigh ? 'btn btn-primary' : 'btn btn-ghost'} style={{width:'100%',justifyContent:'center'}}>
-                  הזמנה בוואטסאפ — {p.name}
-                </a>
-              </div>
-            );
-          })}
+        <div className="pkg-grid pkg-grid-event" style={{display:'grid',gridTemplateColumns:'repeat(2, minmax(0,1fr))',gap:22,maxWidth:920,marginLeft:'auto',marginRight:'auto'}}>
+          {eventPkgs.map(Card)}
         </div>
 
         <div style={{marginTop:40,maxWidth:820,marginLeft:'auto',marginRight:'auto',padding:'22px 26px',background:'var(--ink-2)',border:'1px solid var(--rule)',borderRadius:10,color:'var(--paper)',fontSize:14,lineHeight:1.65,textAlign:'center'}}>
