@@ -132,6 +132,31 @@
   /* Selected package glow */
   .pkg-glow{box-shadow:0 0 0 1px var(--ember), 0 30px 80px -40px var(--ember)}
 
+  /* Event pods — sticker treatment on paper bg */
+  .events-wrapper{position:relative;padding:90px 0 40px;margin-top:110px;border-top:1px solid var(--rule)}
+  .events-wrapper::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 45% at 50% 12%, rgba(210,130,80,0.10), transparent 65%);
+  }
+  .event-pod{position:relative}
+  .event-pod + .event-pod{margin-top:140px}
+  .sticker-card{
+    background:var(--paper) !important;color:var(--ink) !important;
+    border:none !important;border-radius:14px !important;
+    box-shadow:0 50px 100px -30px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,0,0,0.04) !important;
+    transform:rotate(-1.2deg);
+    transition:transform .4s ease, box-shadow .4s ease;
+  }
+  .sticker-card:nth-of-type(even){transform:rotate(1.2deg)}
+  .sticker-card:hover{transform:rotate(0deg) translateY(-2px);box-shadow:0 60px 110px -25px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,0,0,0.06) !important}
+  .sticker-card h3, .sticker-card p, .sticker-card span{color:var(--ink) !important}
+  .sticker-card .ornament-num{color:var(--ember-deep) !important}
+  .sticker-card .tick{color:var(--ember-deep) !important}
+  .sticker-card .mono{color:rgba(0,0,0,0.5) !important}
+  .sticker-card span[style*="paper-muted"]{color:rgba(0,0,0,0.55) !important}
+  .sticker-card hr, .sticker-card div[style*="border-bottom"]{border-bottom-color:rgba(0,0,0,0.12) !important}
+  .sticker-col{position:sticky;top:100px}
+
   /* RTL keep numbers LTR */
   .ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
 
@@ -193,6 +218,14 @@
     /* Packages: 3 cols → 1 col */
     .pkg-grid{grid-template-columns:1fr !important;gap:16px !important}
     .pkg-grid > div{padding:28px 22px !important}
+
+    /* Event pods collapse: un-stick, un-rotate */
+    .events-wrapper{padding:60px 0 20px !important;margin-top:80px !important}
+    .event-pod{grid-template-columns:1fr !important;gap:30px !important}
+    .event-pod + .event-pod{margin-top:80px !important}
+    .sticker-col{position:static !important}
+    .sticker-card{transform:none !important}
+    .sticker-card:nth-of-type(even){transform:none !important}
 
     /* Gallery: 4 cols → 2 cols, ignore spans */
     .gallery-grid{grid-template-columns:1fr 1fr !important;grid-auto-rows:150px !important;gap:8px !important}
@@ -648,13 +681,19 @@ const Packages = ({ highlighted, setHighlighted }) => {
   const mealPkgs = PACKAGES.filter(p => p.price !== null);
   const eventPkgs = PACKAGES.filter(p => p.price === null);
 
-  const Card = (p) => {
+  const Card = (p, variant='default') => {
     const isHigh = highlighted === p.id;
+    const isSticker = variant === 'sticker';
     return (
       <div key={p.id}
         onClick={()=>setHighlighted(p.id)}
-        className={isHigh ? 'pkg-glow' : ''}
-        style={{
+        className={[isHigh ? 'pkg-glow' : '', isSticker ? 'sticker-card' : ''].join(' ').trim()}
+        style={isSticker ? {
+          padding:'40px 34px 34px',
+          cursor:'pointer',
+          position:'relative',
+          display:'flex',flexDirection:'column'
+        } : {
           background: isHigh ? 'var(--ink-3)' : 'var(--ink-2)',
           border: isHigh ? '1px solid var(--ember)' : '1px solid var(--rule)',
           borderRadius:10,
@@ -729,19 +768,69 @@ const Packages = ({ highlighted, setHighlighted }) => {
           {mealPkgs.map(Card)}
         </div>
 
-        {/* Divider + event formats — separate space */}
-        <div style={{marginTop:110,marginBottom:40,textAlign:'center'}}>
-          <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— סגנונות אירוע נוספים</div>
-          <h3 className="serif" style={{fontSize:'clamp(30px,3.5vw,44px)',lineHeight:1.1,fontWeight:400,margin:'0 0 12px',letterSpacing:'-0.02em',color:'var(--paper)'}}>
-            עמדה חיה או <em>בופה</em>.
-          </h3>
-          <p style={{fontSize:15,color:'var(--paper-muted)',maxWidth:560,margin:'0 auto',lineHeight:1.6}}>
-            לאירועי קוקטייל, קבלות פנים ואירועים חברתיים — התאמה אישית לכל אירוע.
-          </p>
-        </div>
+        {/* Event formats — own section, sticker cards on warm-glow backdrop */}
+        <div className="events-wrapper">
+          <div style={{textAlign:'center',marginBottom:60,position:'relative'}}>
+            <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>— סגנונות אירוע נוספים</div>
+            <h3 className="serif" style={{fontSize:'clamp(34px,4vw,52px)',lineHeight:1.05,fontWeight:400,margin:0,letterSpacing:'-0.02em',color:'var(--paper)'}}>
+              לאירועי <em>קוקטייל</em> וקבלות פנים.
+            </h3>
+          </div>
 
-        <div className="pkg-grid pkg-grid-event" style={{display:'grid',gridTemplateColumns:'repeat(2, minmax(0,1fr))',gap:22,maxWidth:920,marginLeft:'auto',marginRight:'auto'}}>
-          {eventPkgs.map(Card)}
+          {eventPkgs.map((p) => {
+            const isBuffet = p.id === 'buffet';
+            const features = isBuffet ? [
+              ['🫒', 'בופה איטלקי מגוון', 'מגוון מנות לפי האירוע, מגדרי תיאבון ועד עיקריות.'],
+              ['🎉', 'שירות בזרימה חופשית', 'האורחים ניגשים בקצב שלהם, בלי המתנה להגשה.'],
+              ['👥', 'מתאים ל־30–200 אורחים', 'גמיש לקבלות פנים ואירועים חברתיים בכל גודל.'],
+              ['✨', 'התאמה אישית', 'התפריט והעמדות נבנים סביב הקונספט של האירוע שלכם.'],
+            ] : [
+              ['🔥', 'עמדת טאבון חיה', 'הטאבון נדלק באירוע — גחלים, להבות, וריח בצק אפוי באוויר.'],
+              ['🍕', 'פיצות אחת־אחת', 'כל פיצה נאפית מול האורחים ויוצאת חמה ישר לצלחת.'],
+              ['🎬', 'חוויית מופע', 'שילוב של אוכל ובידור — האורחים עומדים ומסתכלים.'],
+              ['💍', 'מושלם לקבלות פנים', 'עובד מצוין בקוקטייל פתיחה לחתונות ואירועים חברתיים.'],
+            ];
+
+            return (
+              <div key={p.id} className="event-pod" style={{
+                display:'grid',gridTemplateColumns:'1fr 1fr',gap:70,alignItems:'start'
+              }}>
+                {/* Prose column */}
+                <div>
+                  <div className="tick" style={{color:'var(--ember)',marginBottom:14}}>
+                    {isBuffet ? '— אירוע בופה' : '— עמדה חיה'}
+                  </div>
+                  <h3 className="serif" style={{fontSize:'clamp(32px,3.8vw,48px)',lineHeight:1.05,fontWeight:400,margin:'0 0 20px',letterSpacing:'-0.02em',color:'var(--paper)'}}>
+                    {isBuffet
+                      ? <>בופה איטלקי <em>אצלכם</em>.</>
+                      : <><em>עמדת פיצות</em> חיה.</>}
+                  </h3>
+                  <p style={{fontSize:17,lineHeight:1.7,color:'var(--paper)',opacity:0.82,marginBottom:32,fontWeight:300}}>
+                    {isBuffet
+                      ? 'מגוון מנות איטלקיות בהגשת בופה — מותאם לאירועים חברתיים, קבלות פנים ואירועי קוקטייל. האורחים ניגשים בקצב שלהם, שירות גמיש, חוויית טעמים רחבה.'
+                      : 'עמדת פיצות נאפוליטנית חיה — הטאבון באירוע, האפייה מול האורחים, פיצה אחת־אחת חמה לצלחת. חוויה שכולם זוכרים, גם לפני שהוגשה העיקרית.'}
+                  </p>
+
+                  <div style={{display:'flex',flexDirection:'column',gap:18,borderTop:'1px solid var(--rule)',paddingTop:26}}>
+                    {features.map(([emoji, title, desc])=>(
+                      <div key={title} style={{display:'flex',alignItems:'flex-start',gap:14}}>
+                        <div style={{fontSize:22,lineHeight:1,flexShrink:0,marginTop:2}}>{emoji}</div>
+                        <div>
+                          <div style={{fontSize:15,fontWeight:600,color:'var(--paper)',marginBottom:3}}>{title}</div>
+                          <div style={{fontSize:14,lineHeight:1.55,color:'var(--paper-muted)'}}>{desc}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sticker card column — sticky on desktop */}
+                <div className="sticker-col">
+                  {Card(p, 'sticker')}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <div style={{marginTop:40,maxWidth:820,marginLeft:'auto',marginRight:'auto',padding:'22px 26px',background:'var(--ink-2)',border:'1px solid var(--rule)',borderRadius:10,color:'var(--paper)',fontSize:14,lineHeight:1.65,textAlign:'center'}}>
