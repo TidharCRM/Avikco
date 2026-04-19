@@ -779,21 +779,9 @@ const Packages = ({ highlighted, setHighlighted }) => {
 
           {eventPkgs.map((p) => {
             const isBuffet = p.id === 'buffet';
-            const features = isBuffet ? [
-              ['🫒', 'בופה איטלקי מגוון', 'מגוון מנות לפי האירוע, מגדרי תיאבון ועד עיקריות.'],
-              ['🎉', 'שירות בזרימה חופשית', 'האורחים ניגשים בקצב שלהם, בלי המתנה להגשה.'],
-              ['👥', 'מתאים ל־30–200 אורחים', 'גמיש לקבלות פנים ואירועים חברתיים בכל גודל.'],
-              ['✨', 'התאמה אישית', 'התפריט והעמדות נבנים סביב הקונספט של האירוע שלכם.'],
-            ] : [
-              ['🔥', 'עמדת טאבון חיה', 'הטאבון נדלק באירוע — גחלים, להבות, וריח בצק אפוי באוויר.'],
-              ['🍕', 'פיצות אחת־אחת', 'כל פיצה נאפית מול האורחים ויוצאת חמה ישר לצלחת.'],
-              ['🎬', 'חוויית מופע', 'שילוב של אוכל ובידור — האורחים עומדים ומסתכלים.'],
-              ['💍', 'מושלם לקבלות פנים', 'עובד מצוין בקוקטייל פתיחה לחתונות ואירועים חברתיים.'],
-            ];
-
             return (
               <div key={p.id} className="event-pod" style={{
-                display:'grid',gridTemplateColumns:'1fr 1fr',gap:70,alignItems:'start'
+                display:'grid',gridTemplateColumns:'1fr 1fr',gap:70,alignItems:'center'
               }}>
                 {/* Prose column */}
                 <div>
@@ -805,26 +793,14 @@ const Packages = ({ highlighted, setHighlighted }) => {
                       ? <>בופה איטלקי <em>אצלכם</em>.</>
                       : <><em>עמדת פיצות</em> חיה.</>}
                   </h3>
-                  <p style={{fontSize:17,lineHeight:1.7,color:'var(--paper)',opacity:0.82,marginBottom:32,fontWeight:300}}>
+                  <p style={{fontSize:17,lineHeight:1.7,color:'var(--paper)',opacity:0.82,margin:0,fontWeight:300}}>
                     {isBuffet
                       ? 'מגוון מנות איטלקיות בהגשת בופה — מותאם לאירועים חברתיים, קבלות פנים ואירועי קוקטייל. האורחים ניגשים בקצב שלהם, שירות גמיש, חוויית טעמים רחבה.'
                       : 'עמדת פיצות נאפוליטנית חיה — הטאבון באירוע, האפייה מול האורחים, פיצה אחת־אחת חמה לצלחת. חוויה שכולם זוכרים, גם לפני שהוגשה העיקרית.'}
                   </p>
-
-                  <div style={{display:'flex',flexDirection:'column',gap:18,borderTop:'1px solid var(--rule)',paddingTop:26}}>
-                    {features.map(([emoji, title, desc])=>(
-                      <div key={title} style={{display:'flex',alignItems:'flex-start',gap:14}}>
-                        <div style={{fontSize:22,lineHeight:1,flexShrink:0,marginTop:2}}>{emoji}</div>
-                        <div>
-                          <div style={{fontSize:15,fontWeight:600,color:'var(--paper)',marginBottom:3}}>{title}</div>
-                          <div style={{fontSize:14,lineHeight:1.55,color:'var(--paper-muted)'}}>{desc}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
-                {/* Sticker card column — sticky on desktop */}
+                {/* Sticker card column */}
                 <div className="sticker-col">
                   {Card(p, 'sticker')}
                 </div>
