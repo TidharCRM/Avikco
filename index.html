@@ -257,29 +257,40 @@ const PACKAGES = [
   {
     id:'experience', roman:'I', name:'חוויה קולינרית', price:230,
     tagline:'הקלאסיקה.',
-    blurb:'ארוחה מלאה מלאה בתפריט שלנו — פתיחה, ראשונות, עיקריות וקינוח. הבחירה הנכונה לרוב האירועים.',
-    includes:['תפריט מלא לבחירתכם','טאבון מקצועי','צוות הגשה','כלים חד־פעמיים איכותיים'],
+    blurb:'תפריט ארוחה מלאה לבחירתכם — מנת פתיחה, מנות ראשונות, פסטות טריות, פיצות וקינוחים.',
+    includes:['תפריט ארוחה מלאה לבחירתכם','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
   },
   {
     id:'tasting', roman:'II', name:'ארוחת טעימות', price:250,
     tagline:'עונתי. עשיר.',
-    blurb:'כל מה שיש בחוויה הקולינרית, בתוספת 2 מנות טאפאס מהטאבון המשתנות לפי עונה — לחוויית טעמים עשירה יותר.',
-    includes:['כל מה שבחוויה קולינרית','2 מנות טאפאס עונתיות','מהטאבון ישירות לצלחת','מגוון טעמים מורחב'],
+    blurb:'שדרוג התפריט בעוד 2 מנות נוספות — חוויית טעמים עשירה יותר לאירוע.',
+    includes:['תפריט ארוחה מלאה לבחירתכם','שדרוג התפריט ב־2 מנות נוספות','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
   },
   {
     id:'premium', roman:'III', name:'פרימיום', price:290,
     tagline:'האירוע המלא.',
-    blurb:'חווית הטעימות במלואה, פלוס עריכת שולחן איכותית — ללא חד־פעמי. הגירסה המושקעת ביותר של אביקו.',
-    includes:['כל מה שבארוחת טעימות','עריכת שולחן איכותית','ללא כלים חד־פעמיים','חוויה מלאה מא׳ ועד ת׳'],
+    blurb:'החוויה המושקעת ביותר של אביקו — ארוחה מלאה מורחבת עם עריכת שולחן איכותית.',
+    includes:['תפריט ארוחה מלאה לבחירתכם','שדרוג התפריט ב־2 מנות נוספות','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם','עריכת שולחן מלאה — צלחות, כוסות וסכו״ם'],
+  },
+  {
+    id:'buffet', roman:'IV', name:'בופה ועמדת פיצות', price:null,
+    tagline:'קוקטייל. עמדה חיה.',
+    blurb:'עמדת פיצות חיה ובופה איטלקי — לאירועי קוקטייל, קבלות פנים ואירועים חברתיים. התאמה אישית לכל אירוע.',
+    includes:['עמדת פיצות חיה בטאבון','בופה איטלקי מגוון','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
   },
 ];
 const buildWhatsAppURL = (pkgId) => {
   const p = PACKAGES.find(x => x.id === pkgId);
+  const pkgLine = p
+    ? (p.price != null
+        ? `המסלול שמעניין אותי: ${p.name} (החל מ־${p.price}₪ לסועד)`
+        : `המסלול שמעניין אותי: ${p.name} — הצעת מחיר אישית`)
+    : 'עוד לא החלטתי על מסלול.';
   const lines = [
     'היי אביקו 👋',
     'אשמח לקבל הצעה לאירוע.',
     '',
-    p ? `המסלול שמעניין אותי: ${p.name} (${p.price}₪ לסועד)` : 'עוד לא החלטתי על מסלול.',
+    pkgLine,
     '',
     'פרטים נוספים:',
     '• תאריך משוער:',
@@ -382,7 +393,7 @@ const Hero = () => {
               <span style={{color:'var(--ember)',fontStyle:'normal'}}>.</span>
             </h1>
             <p style={{fontSize:20,lineHeight:1.55,color:'var(--paper)',opacity:0.82,maxWidth:560,margin:0,fontWeight:300}}>
-              טאבון מקצועי, פסטות בעבודת יד, ופיצות נאפוליטניות — מוגשות טריות מול עיני הסועדים שלכם.
+              תפריט ארוחה מלאה — מנות פתיחה, סלטים וראשונות, פסטות בעבודת יד ופיצות נאפוליטניות — מוגשות טריות מול עיני הסועדים שלכם.
               בלי תשתית, בלי לוגיסטיקה, בלי כלים לשטוף בסוף.
             </p>
             <div style={{display:'flex',gap:14,marginTop:36,flexWrap:'wrap'}}>
@@ -414,10 +425,10 @@ const Hero = () => {
             <div className="hero-incl" style={{background:'rgba(14,13,11,0.55)',backdropFilter:'blur(8px)',border:'1px solid var(--rule)',padding:20,borderRadius:14,width:260}}>
               <div className="tick" style={{color:'var(--paper-muted)',marginBottom:10}}>— מה כלול</div>
               {[
-                ['🍕','טאבון + עמדות עבודה'],
+                ['🍽️','תפריט ארוחה מלאה'],
+                ['🍕','מטבח איטלקי נודד'],
                 ['👨‍🍳','צוות מקצועי'],
                 ['🧑‍🌾','חומרי גלם נבחרים'],
-                ['🧼','ללא ניקוי בסוף'],
               ].map(([e,t])=>(
                 <div key={t} style={{display:'flex',alignItems:'center',gap:10,padding:'6px 0',fontSize:14,color:'var(--paper)',opacity:0.9}}>
                   <span style={{width:24,textAlign:'center'}}>{e}</span>{t}
@@ -501,10 +512,10 @@ const About = () => {
 // ---------- Mobile Kitchen / How it works ----------
 const Kitchen = () => {
   const steps = [
-    { n:'01', t:'הגעה והקמה', d:'הצוות מגיע שעתיים לפני האירוע, מקים את עמדות העבודה המעוצבות, ומחמם את הטאבון ל־450°.' },
-    { n:'02', t:'הכנה מול האורחים', d:'פסטות נמתחות במקום, פיצות נאפות אחת־אחת בטאבון, והמנות יוצאות טריות וחמות ישירות לצלחת.' },
+    { n:'01', t:'הגעה והקמה', d:'הצוות מגיע שעתיים לפני האירוע ומקים מטבח איטלקי שלם — טאבון בחימום ל־450°, כיריים, מחבתות, סכיני עבודה וכל הציוד הדרוש להפעלת אירוע מלא. זה לא רק טאבון נודד — זה מטבח איטלקי נודד.' },
+    { n:'02', t:'הכנה מול האורחים', d:'מנות פתיחה, סלטים וראשונות נערכות במקום, פסטות נמתחות מול העיניים, ופיצות נאפות אחת־אחת בטאבון — כל מנה יוצאת טרייה וחמה ישירות לצלחת.' },
     { n:'03', t:'הגשה חמה ורצופה', d:'המנות מגיעות במחזורים — פתיחה, ראשונות, עיקריות, קינוח — בקצב שמתאים לקצב של האירוע שלכם.' },
-    { n:'04', t:'סיום נקי', d:'אנחנו מפרקים, מנקים, ועוזבים. אתם נשארים עם האורחים המרוצים שלכם. בלי כלים לשטוף.' },
+    { n:'04', t:'סיום נקי', d:'אנחנו מפרקים את הציוד, מעמיסים את הכלים המלוכלכים ולוקחים איתנו את כל הבלאגן. אתם נשארים עם האורחים המרוצים — בלי כלים לשטוף ובלי בלאגן של סוף אירוע.' },
   ];
   return (
     <section id="kitchen" style={{padding:'140px 0 120px',background:'var(--ink-2)',position:'relative',overflow:'hidden'}}>
@@ -546,11 +557,11 @@ const Kitchen = () => {
 const Menu = () => {
   const [tab, setTab] = useState('opening');
   const tabs = [
-    { id:'opening',   label:'פתיחה',     title:'פוקצ׳ות תיבול',  dish:'פוקצ׳ה בתיבול מרמה, קונפי שום ועשבי תיבול — אפויה בטאבון', img:'assets/antipasti.jpeg', items:['פוקצ׳ה בתיבול מרמה','קונפי שום','עשבי תיבול טריים'] },
-    { id:'first',     label:'ראשונות',   title:'סלטים וקרצ׳ופי', dish:'סלט שוק — עלי בייבי, עגבניות שרי, מלפפון, בצל סגול, שברי פקאן וגבינת פטה', img:'assets/caesar-salad.jpeg', items:['סלט שוק','סלט פנצנלה','טבולאבנה','קרצ׳ופי אלה רומנה','ארנצ׳יני ירוקים'] },
-    { id:'pasta',     label:'פסטות',     title:'פסטה בעבודת יד', dish:'פאפרדלה ברוטב פומודורו איטלקי, עם בזיליקום טרי ופרמזן פדנו', img:'assets/pasta-pomodoro.jpeg', items:['קלצ׳וני בגבינות','ניוקי תפו״א','פסטה אליו אוליו','רביולי גבינת עזים וסלק','רביולי ארטישוק ירושלמי'] },
-    { id:'pizza',     label:'פיצות',     title:'פיצה נאפוליטנית', dish:'פיצה עם בצק בהתפחה ארוכה של 72 שעות, נאפית בטאבון ב־450°', img:'assets/pizza-onion.jpeg', items:['מרגריטה','פטריות ופרמזן','בצל ובזיליקום','פיצה לבנה','בצק 72 שעות'] },
-    { id:'dessert',   label:'קינוחים',   title:'קלצ׳ונה חם',     dish:'קלצ׳ונה חם אפוי בטאבון במילוי שוקולדים ותוספות משתנות', img:'assets/pizza-crumb.jpeg', items:['קלצ׳ונה שוקולד','קלצ׳ונה פיסטוק','קינוחים עונתיים'] },
+    { id:'opening',   label:'פתיחה',     title:'מנות פתיחה חמות',  dish:'מנות פתיחה חמות אפויות בטאבון — פוקצ׳ה עם עשבי תיבול טריים וקונפי שום, כמבוא ריחני לארוחה.', img:'assets/antipasti.jpeg', items:['פוקצ׳ה בטאבון','קונפי שום','עשבי תיבול טריים'] },
+    { id:'first',     label:'ראשונות',   title:'סלטים ומנות ראשונות', dish:'מגוון סלטים ומנות ראשונות טריות ומגוונות לבחירה מתוך התפריט — מתחלפות לפי עונה וסגנון האירוע.', img:'assets/caesar-salad.jpeg', items:['סלטים בעבודת יד','מנות ראשונות מתחלפות','חומרי גלם טריים','התאמה לאירוע'] },
+    { id:'pasta',     label:'פסטות',     title:'פסטה בעבודת יד', dish:'מגוון פסטות טריות בעבודת יד — נמתחות מול האורחים, רטבים איטלקיים קלאסיים וספיישלים עונתיים שמתחלפים לפי התפריט.', img:'assets/pasta-pomodoro.jpeg', items:['פסטה טרייה במקום','רטבים קלאסיים','ספיישלים עונתיים','התאמה לאירוע'] },
+    { id:'pizza',     label:'פיצות',     title:'פיצה נאפוליטנית', dish:'מגוון פיצות השף מהבצק המיוחד שלנו — פיצות משתנות בשילוב ספיישלים מיוחדים ופיצות קלאסיות, נאפות בטאבון ב־450°.', img:'assets/pizza-onion.jpeg', items:['התפחה ארוכה','בצק יחודי','חומרי גלם טריים','רטבים מיוחדים'] },
+    { id:'dessert',   label:'קינוחים',   title:'קלצ׳ונה חם',     dish:'קלצ׳ונה חם אפוי בטאבון במילוי שוקולדים ותוספות משתנות — קינוח חם שמסיים את הערב כמו באיטליה.', img:'assets/pizza-crumb.jpeg', items:['קלצ׳ונה שוקולד','אפייה בטאבון','הגשה חמה'] },
   ];
   const active = tabs.find(t=>t.id===tab);
 
@@ -597,7 +608,7 @@ const Menu = () => {
           </div>
           <div>
             <div className="hand" style={{fontSize:32,color:'var(--it-red)',marginBottom:8,transform:'rotate(-2deg)',display:'inline-block'}}>
-              {tab==='pizza'?'la pizza':tab==='pasta'?'la pasta':tab==='first'?'antipasti':tab==='opening'?'pane':'dolci'}
+              {tab==='pizza'?'la pizza':tab==='pasta'?'la pasta':tab==='first'?'antipasti':tab==='opening'?'benvenuti':'dolci'}
             </div>
             <h3 className="serif" style={{fontSize:44,fontWeight:400,margin:'0 0 20px',lineHeight:1.05,letterSpacing:'-0.01em'}}>
               {active.title}
@@ -638,12 +649,12 @@ const Packages = ({ highlighted, setHighlighted }) => {
           <h2 className="serif h-serif-lg" style={{fontSize:'clamp(42px,5vw,72px)',lineHeight:1.05,fontWeight:400,margin:'0 0 16px',letterSpacing:'-0.02em'}}>
             בחרו את <em>הסגנון</em> שלכם.
           </h2>
-          <p style={{fontSize:17,color:'var(--paper-muted)',maxWidth:560,margin:'0 auto',lineHeight:1.6}}>
-            שלושה מסלולים, כולם החל מ־12 סועדים. המחיר לסועד כולל את כל החוויה — מהבצק ועד הקינוח.
+          <p style={{fontSize:17,color:'var(--paper-muted)',maxWidth:620,margin:'0 auto',lineHeight:1.6}}>
+            ארבעה מסלולים, החל מ־12 סועדים. המחיר לסועד כולל את כל החוויה — מהבצק ועד הקינוח.
           </p>
         </div>
 
-        <div className="pkg-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24}}>
+        <div className="pkg-grid" style={{display:'grid',gridTemplateColumns:'repeat(4, minmax(0,1fr))',gap:20}}>
           {pkgs.map(p=>{
             const isHigh = highlighted === p.id;
             return (
@@ -669,13 +680,22 @@ const Packages = ({ highlighted, setHighlighted }) => {
                   <span className="ornament-num" style={{fontSize:36,color:'var(--ember)'}}>{p.roman}</span>
                   <span className="tick" style={{color:'var(--paper-muted)'}}>{p.tagline}</span>
                 </div>
-                <h3 className="serif" style={{fontSize:34,fontWeight:400,margin:'0 0 12px',letterSpacing:'-0.01em'}}>{p.name}</h3>
+                <h3 className="serif" style={{fontSize:30,fontWeight:400,margin:'0 0 12px',letterSpacing:'-0.01em'}}>{p.name}</h3>
 
-                <div style={{display:'flex',alignItems:'baseline',gap:6,paddingBottom:24,borderBottom:'1px solid var(--rule)',marginBottom:24}}>
-                  <span className="serif" style={{fontSize:56,fontWeight:700,lineHeight:1,color:'var(--paper)'}}>
-                    <span className="ltr">{p.price}</span>
-                  </span>
-                  <span style={{fontSize:18,color:'var(--paper-muted)'}}>₪ לסועד</span>
+                <div style={{display:'flex',alignItems:'baseline',gap:6,paddingBottom:24,borderBottom:'1px solid var(--rule)',marginBottom:24,minHeight:74}}>
+                  {p.price !== null ? (
+                    <>
+                      <span className="mono" style={{fontSize:12,color:'var(--paper-muted)',letterSpacing:'0.15em',marginLeft:4}}>החל מ־</span>
+                      <span className="serif" style={{fontSize:48,fontWeight:700,lineHeight:1,color:'var(--paper)'}}>
+                        <span className="ltr">{p.price}</span>
+                      </span>
+                      <span style={{fontSize:16,color:'var(--paper-muted)'}}>₪ לסועד</span>
+                    </>
+                  ) : (
+                    <span className="serif" style={{fontSize:26,fontWeight:500,lineHeight:1.15,color:'var(--paper)'}}>
+                      הצעת מחיר אישית
+                    </span>
+                  )}
                 </div>
 
                 <p style={{fontSize:15,lineHeight:1.6,color:'var(--paper)',opacity:0.78,marginBottom:24,minHeight:90}}>{p.blurb}</p>
@@ -699,7 +719,16 @@ const Packages = ({ highlighted, setHighlighted }) => {
           })}
         </div>
 
-        <div style={{marginTop:40,display:'flex',justifyContent:'center',gap:40,flexWrap:'wrap',color:'var(--paper-muted)',fontSize:13}}>
+        <div style={{marginTop:40,maxWidth:820,marginLeft:'auto',marginRight:'auto',padding:'22px 26px',background:'var(--ink-2)',border:'1px solid var(--rule)',borderRadius:10,color:'var(--paper)',fontSize:14,lineHeight:1.65,textAlign:'center'}}>
+          <div style={{opacity:0.9,marginBottom:6}}>
+            <strong>המחירים מתייחסים לאזור באר שבע והסביבה</strong> ויכולים להשתנות בהתאם לתנאי האירוע.
+          </div>
+          <div style={{opacity:0.72}}>
+            לאירועים באזור המרכז — נא ליצור קשר לקבלת הצעת מחיר אישית.
+          </div>
+        </div>
+
+        <div style={{marginTop:24,display:'flex',justifyContent:'center',gap:40,flexWrap:'wrap',color:'var(--paper-muted)',fontSize:13}}>
           <span>• מינימום 12 סועדים</span>
           <span>• קיום האירוע מותנה במקדמה של 20%</span>
           <span>• מנות ללא גלוטן / טבעוניות בתיאום מראש</span>
@@ -851,8 +880,15 @@ const Contact = ({ highlighted }) => {
                   <span className="serif" style={{fontSize:24,fontWeight:500}}>{selected.name}</span>
                 </div>
                 <div style={{fontSize:15,color:'var(--paper-muted)'}}>
-                  <span className="ltr" style={{color:'var(--paper)',fontWeight:600,fontSize:18}}>{selected.price}</span>
-                  <span> ₪ לסועד</span>
+                  {selected.price != null ? (
+                    <>
+                      <span style={{fontSize:12,opacity:0.8,marginLeft:4}}>החל מ־</span>
+                      <span className="ltr" style={{color:'var(--paper)',fontWeight:600,fontSize:18}}>{selected.price}</span>
+                      <span> ₪ לסועד</span>
+                    </>
+                  ) : (
+                    <span style={{color:'var(--paper)',fontWeight:500,fontSize:15}}>הצעת מחיר אישית</span>
+                  )}
                 </div>
               </div>
               <div style={{marginTop:12,display:'flex',gap:8,flexWrap:'wrap'}}>
