@@ -281,7 +281,7 @@ const { useState, useEffect, useRef, useMemo } = React;
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "basil",
   "heroLayout": "portrait",
-  "highlightedPackage": "experience"
+  "highlightedPackage": "tasting"
 }/*EDITMODE-END*/;
 
 const ACCENTS = {
@@ -310,19 +310,19 @@ const PACKAGES = [
     id:'premium', roman:'III', name:'פרימיום', price:290,
     tagline:'האירוע המלא.',
     blurb:'החוויה המושקעת ביותר של אביקו — ארוחה מלאה מורחבת עם עריכת שולחן איכותית.',
-    includes:['תפריט ארוחה מלאה לבחירתכם','שדרוג התפריט ב־2 מנות נוספות','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם','עריכת שולחן מלאה — צלחות, כוסות וסכו״ם'],
+    includes:['תפריט ארוחה מלאה לבחירתכם','שדרוג התפריט ב־2 מנות נוספות','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם','עריכת שולחן מלאה — צלחות, כוסות, סכו״ם ודקורציה במרכז השולחן'],
   },
   {
     id:'buffet', roman:'IV', name:'אירוע בופה', price:null,
     tagline:'בופה איטלקי.',
-    blurb:'מגוון מנות איטלקיות בהגשת בופה — לאירועי קוקטייל, קבלות פנים ואירועים חברתיים.',
-    includes:['בופה איטלקי מגוון','מנות מתחלפות לפי האירוע','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
+    blurb:'תפריט ארוחה מלאה בהגשת בופה — עשיר ומגוון, מותאם לאירועים עם כמות סועדים גדולה. מטבח נודד מלא שמבשל הכל מול העיניים, טרי וחם, עם מזנון שמתחדש לאורך כל האירוע.',
+    includes:['תפריט ארוחה מלאה','תפריט עשיר ומגוון','מתאים לאירועים עם כמות סועדים גדולה','צוות שמכין את כל הארוחה במקום ומחדש את המזנון לאורך האירוע','מטבח מאובזר נודד אליכם לבית'],
   },
   {
     id:'pizza-station', roman:'V', name:'עמדת פיצות', price:null,
     tagline:'עמדה חיה.',
-    blurb:'עמדת פיצות חיה בטאבון — פיצות נאפוליטניות נאפות מול האורחים, אחת־אחת, חמות ישר לצלחת.',
-    includes:['עמדת פיצות חיה בטאבון','פיצות נאפות מול האורחים','מטבח מאובזר נודד אליכם לבית','צוות מקצועי שמגיע לבשל אצלכם'],
+    blurb:'מגיעים אליכם עם עמדות עבודה, טאבונים וכל הציוד — ופותחים פיצרייה במקום. כל ההכנה והאפייה נעשות מול האורחים, שילוב בין פיצות שף מיוחדות, ספיישלים ופיצות קלאסיות.',
+    includes:['עמדה חיה עם עמדות עבודה וטאבונים','שילוב בין פיצות מיוחדות, ספיישלים ופיצות קלאסיות','הכל נעשה מול האורחים — מהבצק ועד הטאבון','תשלום לפי כמות פיצות ולא לפי כמות סועדים'],
   },
 ];
 const buildWhatsAppURL = (pkgId) => {
@@ -456,18 +456,6 @@ const Hero = () => {
 
           {/* right column: stats + sticker */}
           <div className="hero-right" style={{display:'flex',flexDirection:'column',gap:24,alignItems:'flex-end'}}>
-            <div className="sticker hero-sticker" style={{
-              background:'var(--paper)',color:'var(--ink)',
-              padding:'18px 22px',borderRadius:'50%',width:160,height:160,
-              display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
-              transform:'rotate(-6deg)',textAlign:'center',
-              boxShadow:'0 20px 50px rgba(0,0,0,0.4)'
-            }}>
-              <div className="hand" style={{fontSize:22,color:'var(--it-red)',lineHeight:1}}>החל מ־</div>
-              <div className="serif" style={{fontSize:44,fontWeight:700,lineHeight:1,margin:'4px 0'}}>230<span style={{fontSize:22}}>₪</span></div>
-              <div className="mono" style={{fontSize:9,letterSpacing:'0.2em',opacity:0.7}}>PER PERSON</div>
-            </div>
-
             <div className="hero-incl" style={{background:'rgba(14,13,11,0.55)',backdropFilter:'blur(8px)',border:'1px solid var(--rule)',padding:20,borderRadius:14,width:260}}>
               <div className="tick" style={{color:'var(--paper-muted)',marginBottom:10}}>— מה כלול</div>
               {[
@@ -559,7 +547,7 @@ const About = () => {
 const Kitchen = () => {
   const steps = [
     { n:'01', t:'הגעה והקמה', d:'הצוות מגיע שעתיים לפני האירוע ומקים מטבח איטלקי שלם — טאבון בחימום ל־450°, כיריים, מחבתות, סכיני עבודה וכל הציוד הדרוש להפעלת אירוע מלא. זה לא רק טאבון נודד — זה מטבח איטלקי נודד.' },
-    { n:'02', t:'הכנה מול האורחים', d:'מנות פתיחה, סלטים וראשונות נערכות במקום, פסטות נמתחות מול העיניים, ופיצות נאפות אחת־אחת בטאבון — כל מנה יוצאת טרייה וחמה ישירות לצלחת.' },
+    { n:'02', t:'הכנה מול האורחים', d:'מנות פתיחה, סלטים וראשונות נעשות במקום, פסטות טריות מול העיניים, ופיצות נאפות אחת־אחת בטאבון — כל מנה יוצאת חמה ישירות אליכם לשולחן.' },
     { n:'03', t:'הגשה חמה ורצופה', d:'המנות מגיעות במחזורים — פתיחה, ראשונות, עיקריות, קינוח — בקצב שמתאים לקצב של האירוע שלכם.' },
     { n:'04', t:'סיום נקי', d:'אנחנו מפרקים את הציוד, מעמיסים את הכלים המלוכלכים ולוקחים איתנו את כל הבלאגן. אתם נשארים עם האורחים המרוצים — בלי כלים לשטוף ובלי בלאגן של סוף אירוע.' },
   ];
@@ -605,7 +593,7 @@ const Menu = () => {
   const tabs = [
     { id:'opening',   label:'פתיחה',     title:'מנות פתיחה חמות',  dish:'מנות פתיחה חמות אפויות בטאבון — פוקצ׳ה עם עשבי תיבול טריים וקונפי שום, כמבוא ריחני לארוחה.', img:'assets/antipasti.jpeg', items:['פוקצ׳ה בטאבון','קונפי שום','עשבי תיבול טריים'] },
     { id:'first',     label:'ראשונות',   title:'סלטים ומנות ראשונות', dish:'מגוון סלטים ומנות ראשונות טריות ומגוונות לבחירה מתוך התפריט — מתחלפות לפי עונה וסגנון האירוע.', img:'assets/caesar-salad.jpeg', items:['סלטים בעבודת יד','מנות ראשונות מתחלפות','חומרי גלם טריים','התאמה לאירוע'] },
-    { id:'pasta',     label:'פסטות',     title:'פסטה בעבודת יד', dish:'מגוון פסטות טריות בעבודת יד — נמתחות מול האורחים, רטבים איטלקיים קלאסיים וספיישלים עונתיים שמתחלפים לפי התפריט.', img:'assets/pasta-pomodoro.jpeg', items:['פסטה טרייה במקום','רטבים קלאסיים','ספיישלים עונתיים','התאמה לאירוע'] },
+    { id:'pasta',     label:'פסטות',     title:'פסטה בעבודת יד', dish:'מגוון פסטות טריות בעבודת יד — מוכנות במקום מול האורחים, רטבים איטלקיים קלאסיים וספיישלים עונתיים שמתחלפים לפי התפריט.', img:'assets/pasta-pomodoro.jpeg', items:['פסטה טרייה במקום','רטבים קלאסיים','ספיישלים עונתיים','התאמה לאירוע'] },
     { id:'pizza',     label:'פיצות',     title:'פיצה נאפוליטנית', dish:'מגוון פיצות השף מהבצק המיוחד שלנו — פיצות משתנות בשילוב ספיישלים מיוחדים ופיצות קלאסיות, נאפות בטאבון ב־450°.', img:'assets/pizza-onion.jpeg', items:['התפחה ארוכה','בצק יחודי','חומרי גלם טריים','רטבים מיוחדים'] },
     { id:'dessert',   label:'קינוחים',   title:'קלצ׳ונה חם',     dish:'קלצ׳ונה חם אפוי בטאבון במילוי שוקולדים ותוספות משתנות — קינוח חם שמסיים את הערב כמו באיטליה.', img:'assets/pizza-crumb.jpeg', items:['קלצ׳ונה שוקולד','אפייה בטאבון','הגשה חמה'] },
   ];
@@ -770,6 +758,15 @@ const Packages = ({ highlighted, setHighlighted }) => {
           </p>
         </div>
 
+        <div style={{marginBottom:40,maxWidth:820,marginLeft:'auto',marginRight:'auto',padding:'22px 26px',background:'var(--ink-2)',border:'1px solid var(--rule)',borderRadius:10,color:'var(--paper)',fontSize:14,lineHeight:1.65,textAlign:'center'}}>
+          <div style={{opacity:0.9,marginBottom:6}}>
+            <strong>המחירים מתייחסים לאזור באר שבע והסביבה</strong> ויכולים להשתנות בהתאם לתנאי האירוע.
+          </div>
+          <div style={{opacity:0.72}}>
+            לאירועים באזור המרכז — נא ליצור קשר לקבלת הצעת מחיר אישית.
+          </div>
+        </div>
+
         {/* Meal packages — 3 cards */}
         <div className="pkg-grid" style={{display:'grid',gridTemplateColumns:'repeat(3, minmax(0,1fr))',gap:22}}>
           {mealPkgs.map(Card)}
@@ -795,8 +792,8 @@ const Packages = ({ highlighted, setHighlighted }) => {
                   </h3>
                   <p style={{fontSize:17,lineHeight:1.7,color:'var(--paper)',opacity:0.82,margin:0,fontWeight:300}}>
                     {isBuffet
-                      ? 'מגוון מנות איטלקיות בהגשת בופה — מותאם לאירועים חברתיים, קבלות פנים ואירועי קוקטייל. האורחים ניגשים בקצב שלהם, שירות גמיש, חוויית טעמים רחבה.'
-                      : 'עמדת פיצות נאפוליטנית חיה — הטאבון באירוע, האפייה מול האורחים, פיצה אחת־אחת חמה לצלחת. חוויה שכולם זוכרים, גם לפני שהוגשה העיקרית.'}
+                      ? 'תפריט ארוחה מלאה בהגשת בופה — מטבח איטלקי נודד שמבשל הכל מול העיניים, טרי וחם, עם מזנון שמתחדש לאורך כל האירוע. תפריט עשיר ומגוון, מותאם לאירועים עם כמות סועדים גדולה.'
+                      : 'מגיעים לאירוע עם עמדות עבודה, טאבונים וכל הציוד — ופותחים פיצרייה במקום. כל ההכנה והאפייה נעשות מול האורחים, שילוב בין פיצות שף מיוחדות, ספיישלים ופיצות קלאסיות. תשלום לפי כמות פיצות, לא לפי סועדים.'}
                   </p>
                 </div>
 
@@ -809,16 +806,7 @@ const Packages = ({ highlighted, setHighlighted }) => {
           })}
         </div>
 
-        <div style={{marginTop:40,maxWidth:820,marginLeft:'auto',marginRight:'auto',padding:'22px 26px',background:'var(--ink-2)',border:'1px solid var(--rule)',borderRadius:10,color:'var(--paper)',fontSize:14,lineHeight:1.65,textAlign:'center'}}>
-          <div style={{opacity:0.9,marginBottom:6}}>
-            <strong>המחירים מתייחסים לאזור באר שבע והסביבה</strong> ויכולים להשתנות בהתאם לתנאי האירוע.
-          </div>
-          <div style={{opacity:0.72}}>
-            לאירועים באזור המרכז — נא ליצור קשר לקבלת הצעת מחיר אישית.
-          </div>
-        </div>
-
-        <div style={{marginTop:24,display:'flex',justifyContent:'center',gap:40,flexWrap:'wrap',color:'var(--paper-muted)',fontSize:13}}>
+        <div style={{marginTop:40,display:'flex',justifyContent:'center',gap:40,flexWrap:'wrap',color:'var(--paper-muted)',fontSize:13}}>
           <span>• מינימום 12 סועדים</span>
           <span>• קיום האירוע מותנה במקדמה של 20%</span>
           <span>• מנות ללא גלוטן / טבעוניות בתיאום מראש</span>
