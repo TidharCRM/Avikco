@@ -807,7 +807,6 @@ const Packages = ({ highlighted, setHighlighted }) => {
         </div>
 
         <div style={{marginTop:40,display:'flex',justifyContent:'center',gap:40,flexWrap:'wrap',color:'var(--paper-muted)',fontSize:13}}>
-          <span>• מינימום 12 סועדים</span>
           <span>• קיום האירוע מותנה במקדמה של 20%</span>
           <span>• מנות ללא גלוטן / טבעוניות בתיאום מראש</span>
         </div>
@@ -877,7 +876,7 @@ const Quote = () => (
 );
 
 // ---------- Contact / CTA ----------
-const Contact = ({ highlighted }) => {
+const Contact = ({ highlighted, setHighlighted }) => {
   const selected = PACKAGES.find(p => p.id === highlighted) || PACKAGES[0];
   const whatsappURL = buildWhatsAppURL(selected.id);
 
@@ -962,17 +961,26 @@ const Contact = ({ highlighted }) => {
                 </div>
               </div>
               <div style={{marginTop:12,display:'flex',gap:8,flexWrap:'wrap'}}>
-                {PACKAGES.map(p => (
-                  <span key={p.id} style={{
-                    fontSize:12,padding:'5px 11px',borderRadius:999,
-                    border:'1px solid ' + (p.id===selected.id ? 'var(--ember)' : 'var(--rule)'),
-                    color: p.id===selected.id ? 'var(--ember)' : 'var(--paper-muted)',
-                    background: p.id===selected.id ? 'rgba(0,0,0,0.25)' : 'transparent'
-                  }}>{p.name}</span>
-                ))}
+                {PACKAGES.map(p => {
+                  const isSel = p.id===selected.id;
+                  return (
+                    <button key={p.id} type="button" onClick={()=>setHighlighted(p.id)} aria-pressed={isSel}
+                      style={{
+                        fontSize:12,padding:'5px 11px',borderRadius:999,cursor:'pointer',
+                        fontFamily:'inherit',
+                        border:'1px solid ' + (isSel ? 'var(--ember)' : 'var(--rule)'),
+                        color: isSel ? 'var(--ember)' : 'var(--paper-muted)',
+                        background: isSel ? 'rgba(0,0,0,0.25)' : 'transparent',
+                        transition:'all .2s ease'
+                      }}
+                      onMouseEnter={e=>{ if(!isSel){ e.currentTarget.style.borderColor='var(--ember)'; e.currentTarget.style.color='var(--paper)'; }}}
+                      onMouseLeave={e=>{ if(!isSel){ e.currentTarget.style.borderColor='var(--rule)'; e.currentTarget.style.color='var(--paper-muted)'; }}}
+                    >{p.name}</button>
+                  );
+                })}
               </div>
               <div style={{marginTop:14,fontSize:12,color:'var(--paper-muted)',lineHeight:1.5}}>
-                לא המסלול הנכון? בחרו אחר בסעיף <a href="#packages" style={{color:'var(--ember)',borderBottom:'1px solid var(--ember)'}}>המסלולים</a> וההודעה תתעדכן.
+                לחצו על מסלול להחלפה — ההודעה תתעדכן בהתאם. לפרטים מלאים על כל מסלול, <a href="#packages" style={{color:'var(--ember)',borderBottom:'1px solid var(--ember)'}}>המסלולים</a>.
               </div>
             </div>
 
@@ -1004,8 +1012,8 @@ const Footer = () => (
         <a href="#">נגישות</a>
       </div>
     </div>
-    <div className="container" style={{marginTop:40,paddingTop:30,borderTop:'1px solid var(--rule)',opacity:0.5}}>
-      <div className="serif footer-word" style={{fontSize:'clamp(60px,14vw,220px)',lineHeight:0.9,fontWeight:700,letterSpacing:'-0.04em',color:'var(--ink-3)',textAlign:'center',fontStyle:'italic'}}>
+    <div className="container" style={{marginTop:40,paddingTop:30,borderTop:'1px solid var(--rule)'}}>
+      <div className="serif footer-word" style={{fontSize:'clamp(60px,14vw,220px)',lineHeight:0.9,fontWeight:700,letterSpacing:'-0.04em',color:'var(--paper)',textAlign:'center',fontStyle:'italic'}}>
         Avikco — Buon appetito.
       </div>
     </div>
@@ -1096,7 +1104,7 @@ const App = () => {
       <Packages highlighted={state.highlightedPackage} setHighlighted={(v)=>setState({ ...state, highlightedPackage: v })}/>
       <Quote />
       <Gallery />
-      <Contact highlighted={state.highlightedPackage} />
+      <Contact highlighted={state.highlightedPackage} setHighlighted={(v)=>setState({ ...state, highlightedPackage: v })}/>
       <Footer />
     </>
   );
